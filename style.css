@@ -1,0 +1,258 @@
+/* ═════════════════════════════════════════════
+   醉今宵 · 酒桌游戏屋（中式酒馆红金风）
+   ═════════════════════════════════════════════ */
+:root {
+  --night: #1c0b0b;
+  --night-2: #2a1010;
+  --red: #b02323;
+  --red-d: #7a1414;
+  --gold: #e8b658;
+  --gold-d: #b8862a;
+  --paper: #f6ead2;
+  --ink: #3a2410;
+  --serif: "Georgia", "STKaiti", "KaiTi", "SimSun", serif;
+  --sans: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--sans);
+  background:
+    radial-gradient(ellipse at 50% 0%, #40161a 0%, transparent 55%),
+    repeating-linear-gradient(90deg, transparent 0 90px, rgba(232, 182, 88, 0.03) 90px 92px),
+    linear-gradient(var(--night), #120606);
+  color: var(--paper);
+  min-height: 100vh;
+  padding: 34px 16px 60px;
+}
+
+/* ---------- 灯笼招牌 ---------- */
+.tavern { text-align: center; margin-bottom: 26px; }
+.lantern {
+  display: inline-block; vertical-align: middle;
+  width: 52px; padding: 12px 0 16px;
+  font-family: var(--serif); font-size: 22px; color: #ffd9a0;
+  background: radial-gradient(ellipse at 50% 35%, #e04a3a, var(--red-d));
+  border-radius: 50% / 46%;
+  box-shadow: 0 0 26px rgba(224, 74, 58, 0.55), inset 0 -6px 10px rgba(0, 0, 0, 0.35);
+  position: relative;
+  animation: sway 3.4s ease-in-out infinite;
+}
+.lantern::before, .lantern::after {
+  content: ""; position: absolute; left: 50%; width: 16px; height: 5px;
+  transform: translateX(-50%);
+  background: var(--gold-d);
+}
+.lantern::before { top: -6px; border-radius: 3px; }
+.lantern::after { bottom: -6px; border-radius: 3px; }
+.l2 { animation-delay: 1.7s; }
+@keyframes sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.board { display: inline-block; margin: 0 22px; vertical-align: middle; }
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 6vw, 46px);
+  letter-spacing: 16px; padding-left: 16px;
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(232, 182, 88, 0.5), 2px 3px 0 #400;
+}
+.board p {
+  margin-top: 8px; font-size: 11px; letter-spacing: 3px;
+  color: rgba(246, 234, 210, 0.45);
+}
+
+/* ---------- 酒令页签 ---------- */
+.tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 24px; }
+.tab {
+  font-family: var(--serif); font-size: 14px; letter-spacing: 3px;
+  color: rgba(246, 234, 210, 0.7);
+  background: var(--night-2);
+  border: 1px solid rgba(232, 182, 88, 0.28);
+  border-bottom: 4px solid #3a0a0a;
+  padding: 8px 22px; border-radius: 6px; cursor: pointer;
+  transition: all 0.15s;
+}
+.tab:hover { color: var(--gold); }
+.tab.active {
+  background: var(--red); color: #ffe9c8; font-weight: 700;
+  border-color: var(--gold-d);
+  box-shadow: 0 4px 14px rgba(176, 35, 35, 0.5);
+}
+
+/* ---------- 游戏大厅 ---------- */
+.hall { max-width: 760px; margin: 0 auto; }
+.game {
+  background: linear-gradient(160deg, #331313, #1e0a0a);
+  border: 1px solid rgba(232, 182, 88, 0.25);
+  border-radius: 14px;
+  padding: 30px 26px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(232, 182, 88, 0.12);
+  text-align: center;
+}
+
+.verdict {
+  font-family: var(--serif); font-size: 16px; letter-spacing: 2px;
+  color: var(--gold); min-height: 26px; margin: 18px 0 6px;
+}
+.gold-btn {
+  font-family: var(--serif); font-size: 16px; letter-spacing: 6px;
+  color: #3a1c05; background: linear-gradient(#f2cd7c, var(--gold-d));
+  border: none; border-radius: 999px;
+  padding: 12px 44px; cursor: pointer;
+  box-shadow: 0 5px 0 #7a5a16, 0 10px 22px rgba(232, 182, 88, 0.3);
+  transition: all 0.12s;
+}
+.gold-btn:hover { filter: brightness(1.08); }
+.gold-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #7a5a16; }
+.gold-btn:disabled { filter: grayscale(0.6); cursor: wait; }
+
+/* ═══ ① 转盘 ═══ */
+.stage { position: relative; width: 300px; height: 300px; margin: 0 auto; }
+.pointer {
+  position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+  z-index: 5; color: var(--gold); font-size: 26px;
+  text-shadow: 0 2px 6px #000;
+}
+.wheel {
+  width: 100%; height: 100%; border-radius: 50%;
+  border: 8px solid var(--gold-d);
+  box-shadow: 0 0 0 4px #521212, 0 14px 34px rgba(0, 0, 0, 0.6);
+  position: relative;
+  transition: transform 4.2s cubic-bezier(0.12, 0.8, 0.18, 1);
+}
+.hub {
+  position: absolute; inset: 0; margin: auto;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f6d98c, var(--gold-d));
+  display: grid; place-items: center;
+  font-family: var(--serif); font-size: 22px; color: #4a2a05;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  z-index: 3;
+}
+.seg-label {
+  position: absolute; left: 50%; top: 50%;
+  font-family: var(--serif); font-size: 13px; color: #fff5df;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.75);
+  white-space: nowrap; pointer-events: none;
+}
+
+/* 酒友名单 */
+.players { margin-top: 26px; text-align: left; }
+.players h4 {
+  font-family: var(--serif); letter-spacing: 3px;
+  color: rgba(232, 182, 88, 0.8); font-size: 13px; margin-bottom: 10px;
+}
+#playerList { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+#playerList li {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(232, 182, 88, 0.1);
+  border: 1px dashed rgba(232, 182, 88, 0.4);
+  border-radius: 999px; padding: 4px 8px 4px 14px;
+  font-size: 13px;
+}
+#playerList li.win {
+  background: var(--red); border-style: solid; border-color: var(--gold);
+  color: #ffe9c8;
+}
+#playerList button {
+  border: none; background: none; color: rgba(246, 234, 210, 0.4);
+  cursor: pointer; font-size: 14px;
+}
+#playerList button:hover { color: #ff8a7a; }
+#playerForm { display: flex; gap: 8px; margin-top: 12px; }
+#playerInput {
+  flex: 1; background: #170808; color: var(--paper);
+  border: 1px solid rgba(232, 182, 88, 0.3); border-radius: 6px;
+  padding: 8px 12px; font-size: 13px; outline: none;
+}
+#playerInput:focus { border-color: var(--gold); }
+#playerForm button {
+  background: var(--red-d); color: #ffe9c8; border: 1px solid var(--gold-d);
+  border-radius: 6px; padding: 8px 18px; cursor: pointer; font-size: 13px;
+}
+.hint { font-size: 11px; color: rgba(246, 234, 210, 0.35); margin-top: 8px; }
+
+/* ═══ ② 骰子 ═══ */
+.dice-row { display: flex; align-items: center; justify-content: center; gap: 26px; }
+.die {
+  width: 96px; height: 96px; border-radius: 16px;
+  background: linear-gradient(145deg, #fdf6e6, #ddd0b4);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5), inset 0 -6px 0 rgba(0, 0, 0, 0.08);
+  display: grid; place-items: center;
+  font-size: 72px; line-height: 1; color: #2a1a0a;
+  transition: transform 0.15s;
+}
+.die.red { color: var(--red-d); }
+.die.rolling { animation: shake 0.14s linear infinite; }
+@keyframes shake {
+  0% { transform: rotate(-7deg) translateY(-4px); }
+  50% { transform: rotate(6deg) translateY(3px); }
+  100% { transform: rotate(-4deg); }
+}
+.vs { font-family: var(--serif); font-size: 20px; color: var(--gold); }
+.dice-names { margin-top: 14px; font-size: 13px; color: rgba(246, 234, 210, 0.6); }
+
+/* ═══ ③ 罚酒牌 ═══ */
+.deck-filter { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 22px; }
+.chip {
+  font-size: 12px; letter-spacing: 2px;
+  color: rgba(246, 234, 210, 0.7); background: none;
+  border: 1px solid rgba(232, 182, 88, 0.35); border-radius: 999px;
+  padding: 5px 16px; cursor: pointer;
+}
+.chip.active { background: var(--gold-d); color: #3a1c05; font-weight: 700; }
+
+.card-zone { perspective: 900px; }
+.pcard {
+  width: 260px; height: 340px; margin: 0 auto;
+  border-radius: 12px;
+  transition: transform 0.55s cubic-bezier(0.3, 1.2, 0.4, 1);
+  transform-style: preserve-3d;
+  position: relative;
+}
+.pcard.flipped { transform: rotateY(180deg) scale(1.04); }
+.pcard.back, .pcard.face {
+  position: absolute; inset: 0; border-radius: 12px;
+  backface-visibility: hidden;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 24px;
+}
+.pcard.back {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(232, 182, 88, 0.16), transparent 58%),
+    repeating-linear-gradient(45deg, var(--red-d) 0 12px, var(--red) 12px 24px);
+  border: 2px solid var(--gold-d);
+  font-family: var(--serif); font-size: 24px; letter-spacing: 10px;
+  color: var(--gold);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6);
+}
+.pcard.face {
+  transform: rotateY(180deg);
+  background: linear-gradient(170deg, #fbf3de, #ecdcba);
+  border: 2px solid var(--gold-d);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6);
+  color: var(--ink);
+}
+.pcard.face .cat {
+  font-size: 11px; letter-spacing: 4px; color: var(--red);
+  border: 1px solid var(--red); border-radius: 999px;
+  padding: 3px 14px; margin-bottom: 18px;
+}
+.pcard.face .txt {
+  font-family: var(--serif); font-size: 17px; line-height: 1.8;
+  letter-spacing: 1px; text-align: center;
+}
+.pcard.face .cups { margin-top: 18px; font-size: 20px; letter-spacing: 3px; }
+
+.used-count { margin-top: 18px; font-size: 12px; color: rgba(246, 234, 210, 0.45); }
+.link { background: none; border: none; color: var(--gold-d); cursor: pointer; font-size: 12px; text-decoration: underline; }
+
+@media (max-width: 520px) {
+  .stage { width: 250px; height: 250px; }
+  .die { width: 76px; height: 76px; font-size: 56px; }
+  .lantern { width: 42px; font-size: 18px; }
+}

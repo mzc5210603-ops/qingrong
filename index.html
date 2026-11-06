@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>醉今宵 · 酒桌游戏屋</title>
+  <meta name="description" content="酒桌罚酒小游戏：命运转盘、吹牛骰子、真心话大冒险罚酒卡。适度饮酒，快乐第一。" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 灯笼招牌 -->
+  <header class="tavern">
+    <span class="lantern l1">酒</span>
+    <div class="board">
+      <h1>醉 今 宵</h1>
+      <p>DRINK TONIGHT · 酒桌游戏屋 · 输的喝，赢的也喝</p>
+    </div>
+    <span class="lantern l2">令</span>
+  </header>
+
+  <!-- 酒令切换 -->
+  <nav class="tabs">
+    <button class="tab active" data-t="wheel">命运转盘</button>
+    <button class="tab" data-t="dice">吹牛骰子</button>
+    <button class="tab" data-t="card">罚酒牌</button>
+  </nav>
+
+  <main class="hall">
+
+    <!-- ═══ ① 命运转盘 ═══ -->
+    <section class="game" id="wheel">
+      <div class="stage">
+        <div class="pointer">▼</div>
+        <div class="wheel" id="wheelDisc"><div class="hub">转</div></div>
+      </div>
+      <div class="verdict" id="wheelVerdict">点「开转」—— 看天意选谁喝</div>
+      <button class="gold-btn" id="spinBtn">开 转</button>
+
+      <div class="players">
+        <h4>酒友名单</h4>
+        <ul id="playerList"></ul>
+        <form id="playerForm">
+          <input id="playerInput" maxlength="6" placeholder="报上名来（≤6字）" />
+          <button type="submit">入座</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ═══ ② 吹牛骰子 ═══ -->
+    <section class="game" id="dice" hidden>
+      <div class="dice-row">
+        <div class="die" id="die1"><span>⚀</span></div>
+        <span class="vs">对</span>
+        <div class="die red" id="die2"><span>⚀</span></div>
+      </div>
+      <div class="dice-names" id="diceNames">左家 vs 右家</div>
+      <div class="verdict" id="diceVerdict">两家各掷一把，点数小的罚酒</div>
+      <button class="gold-btn" id="rollBtn">落 盅</button>
+    </section>
+
+    <!-- ═══ ③ 罚酒牌 ═══ -->
+    <section class="game" id="card" hidden>
+      <div class="deck-filter">
+        <button class="chip active" data-c="all">混着抽</button>
+        <button class="chip" data-c="真心话">真心话</button>
+        <button class="chip" data-c="大冒险">大冒险</button>
+        <button class="chip" data-c="罚酒">罚酒</button>
+      </div>
+      <div class="card-zone">
+        <div class="pcard back" id="pcard">罚 酒 牌</div>
+      </div>
+      <div class="verdict" id="cardVerdict">从牌堆抽一张 —— 中招者照牌执行</div>
+      <button class="gold-btn" id="drawBtn">抽 牌</button>
+      <p class="used-count">已抽 <b id="drawnCount">0</b> 张 · <button class="link" id="resetDeck">重洗牌堆</button></p>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
